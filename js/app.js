@@ -17,7 +17,12 @@ const isLiked = (id) => {
 
 const addToLiked = (id) => {
   likedPostsId.push(id);
-  showPosts(posts);
+  const remainingPosts = posts.filter(
+    (post) => !reportedPostsId.includes(post.id)
+  );
+  // console.log(remainingPosts);
+  showPosts(remainingPosts);
+  // showPosts(posts);
 };
 
 const reportPost = (id) => {
@@ -25,6 +30,7 @@ const reportPost = (id) => {
   const remainingPosts = posts.filter(
     (post) => !reportedPostsId.includes(post.id)
   );
+  // console.log(remainingPosts);
   showPosts(remainingPosts);
 };
 
@@ -39,23 +45,25 @@ const switchTab = (id) => {
     document.getElementById("posts").style.display = "grid";
     document.getElementById("liked").style.display = "none";
     document.getElementById("reported").style.display = "none";
+    document.getElementById("question-answer").style.display = "block";
   } else if (id === "liked") {
     document.getElementById("liked").style.display = "block";
     document.getElementById("posts").style.display = "none";
     document.getElementById("reported").style.display = "none";
+    document.getElementById("question-answer").style.display = "none";
 
     displayLikedPosts();
   } else {
     document.getElementById("reported").style.display = "block";
     document.getElementById("posts").style.display = "none";
     document.getElementById("liked").style.display = "none";
+    document.getElementById("question-answer").style.display = "none";
 
     displayReportedPosts();
   }
 };
 
 const createPost = (post) => {
-  const image = post.image;
   const div = document.createElement("article");
   div.classList.add("post");
   div.innerHTML = `
@@ -80,7 +88,7 @@ const createPost = (post) => {
                 <div class="post__medias">
                   <img
                     class="post__media"
-                    src="${image}"
+                    src="${post.image}"
                     alt="Post Content"
                   />
                 </div>
@@ -122,15 +130,13 @@ const createPost = (post) => {
                       <a class="post__name--underline" href="#">user123</a> and
                       <a href="#">73 others</a></span>
                   </div>
-
                   <hr/>
-
                   <div class="post__description">
                     <small>
                       <a class="post__name--underline" href="#">
-                          ${post.comments[0]?.user}
+                          ${post.comments ? post.comments[0].user : "Not Found"}
                       </a>
-                      ${post.comments[0]?.text}
+                      ${post.comments ? post.comments[0].text : "Not Found"}
                     </small>
                   </div>
                   <span class="post__date-time">30 minutes ago</span>
@@ -153,6 +159,7 @@ const showPosts = (posts) => {
 const displayLikedPosts = () => {
   document.getElementById("liked").innerHTML = "";
   const likedPosts = getLikedPosts();
+
   likedPosts.forEach((post) => {
     const div = createPost(post);
     document.getElementById("liked").appendChild(div);
@@ -162,6 +169,7 @@ const displayLikedPosts = () => {
 const displayReportedPosts = () => {
   document.getElementById("reported").innerHTML = "";
   const reportedPosts = getReportedPosts();
+
   reportedPosts.forEach((post) => {
     const div = createPost(post);
     document.getElementById("reported").appendChild(div);
@@ -169,7 +177,7 @@ const displayReportedPosts = () => {
 };
 
 const loadPosts = async () => {
-  let data = await fetch("./data/posts.json");
+  let data = await fetch("../data/posts.json");
   posts = await data.json();
   showPosts(posts);
 };
