@@ -42,19 +42,27 @@ const switchTab = (id) => {
     document.getElementById("posts").style.display = "grid";
     document.getElementById("liked").style.display = "none";
     document.getElementById("reported").style.display = "none";
+    document.getElementById("liked-posts").style.display = "none";
+    document.getElementById("reported-posts").style.display = "none";
     document.getElementById("question-answer").style.display = "block";
   } else if (id === "liked") {
     document.getElementById("liked").style.display = "block";
     document.getElementById("posts").style.display = "none";
     document.getElementById("reported").style.display = "none";
+    document.getElementById("liked-posts").style.display = "block";
+    document.getElementById("reported-posts").style.display = "none";
     document.getElementById("question-answer").style.display = "none";
+    document.getElementById("liked-posts").innerHTML = "";
 
     displayLikedPosts();
   } else {
     document.getElementById("reported").style.display = "block";
     document.getElementById("posts").style.display = "none";
     document.getElementById("liked").style.display = "none";
+    document.getElementById("liked-posts").style.display = "none";
+    document.getElementById("reported-posts").style.display = "block";
     document.getElementById("question-answer").style.display = "none";
+    document.getElementById("reported-posts").innerHTML = "";
 
     displayReportedPosts();
   }
@@ -154,22 +162,22 @@ const showPosts = (posts) => {
 };
 
 const displayLikedPosts = () => {
-  document.getElementById("liked").innerHTML = "";
+  // document.getElementById("liked").innerHTML = "";
   const likedPosts = getLikedPosts();
 
   likedPosts.forEach((post) => {
     const div = createPost(post);
-    document.getElementById("liked").appendChild(div);
+    document.getElementById("liked-posts").appendChild(div);
   });
 };
 
 const displayReportedPosts = () => {
-  document.getElementById("reported").innerHTML = "";
+  // document.getElementById("reported").innerHTML = "";
   const reportedPosts = getReportedPosts();
 
   reportedPosts.forEach((post) => {
     const div = createPost(post);
-    document.getElementById("reported").appendChild(div);
+    document.getElementById("reported-posts").appendChild(div);
   });
 };
 
